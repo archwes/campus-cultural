@@ -4,9 +4,14 @@ import { Formik } from "formik";
 import { sendPasswordResetEmail } from "firebase/auth";
 
 import { passwordResetSchema } from "../utils";
+<<<<<<< HEAD
 import { Images, Colors, auth } from "../config";
 import { View, Logo, TextInput, Button, FormErrorMessage } from "../components";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+=======
+import { Colors, auth } from "../config";
+import { View, TextInput, Button, FormErrorMessage } from "../components";
+>>>>>>> d72159cfe99ce8470361a977dd167d3a1b32a968
 
 export const ForgotPasswordScreen = ({ navigation }) => {
   const [errorState, setErrorState] = useState("");
@@ -24,12 +29,18 @@ export const ForgotPasswordScreen = ({ navigation }) => {
 
   return (
     <View isSafe style={styles.container}>
+<<<<<<< HEAD
       <KeyboardAwareScrollView enableOnAndroid={true}>
         {/* LogoContainer: consist app logo and screen title */}
         <View style={styles.logoContainer}>
           <Logo uri={Images.logo} />
           <Text style={styles.screenTitle}>Esqueci minha senha</Text>
         </View>
+=======
+      <View style={styles.innerContainer}>
+        <Text style={styles.screenTitle}>Esqueci minha senha</Text>
+      </View>
+>>>>>>> d72159cfe99ce8470361a977dd167d3a1b32a968
       <Formik
         initialValues={{ email: "" }}
         validationSchema={passwordResetSchema}
@@ -75,7 +86,10 @@ export const ForgotPasswordScreen = ({ navigation }) => {
         title={"Voltar à tela de Login"}
         onPress={() => navigation.navigate("Login")}
       />
+<<<<<<< HEAD
       </KeyboardAwareScrollView>
+=======
+>>>>>>> d72159cfe99ce8470361a977dd167d3a1b32a968
     </View>
   );
 };
@@ -86,9 +100,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     paddingHorizontal: 12,
   },
+<<<<<<< HEAD
   logoContainer: {
     alignItems: "center",
   },
+=======
+>>>>>>> d72159cfe99ce8470361a977dd167d3a1b32a968
   innercontainer: {
     alignItems: "center",
   },
