@@ -58,11 +58,7 @@ Para executar o aplicativo localmente, você precisará de:
 
 1. Clone este repositório:
    ```bash
-<<<<<<< HEAD
-   git clone https://github.com/usuario/seu-repositorio.git
-=======
    git clone https://github.com/archwes/campus-cultural.git
->>>>>>> d72159cfe99ce8470361a977dd167d3a1b32a968
    ```
 
 2. Instale as dependências:
