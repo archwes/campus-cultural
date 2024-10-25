@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, Alert } from "react-native";
 import { Formik } from "formik";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -24,6 +24,13 @@ export const SignupScreen = ({ navigation }) => {
   const handleSignup = async (values) => {
     const { email, password } = values;
 
+    // Verifica se o email termina com "utfpr.edu.br"
+    if (!email.endsWith("utfpr.edu.br")) {
+      setErrorState("Por favor, use um e-mail institucional 'utfpr.edu.br'.");
+      return;
+    }
+
+    // Se o e-mail for válido, prossegue com a criação da conta
     createUserWithEmailAndPassword(auth, email, password).catch((error) =>
       setErrorState(error.message)
     );
