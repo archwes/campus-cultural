@@ -1,7 +1,7 @@
 
 # 📱 Aplicativo Mobile - CampusCultural
 
-Este projeto foi desenvolvido durante a disciplina **Oficina de Integração 2** no curso de Engenharia de Software da **UTFPR - Câmpus Dois Vizinhos**. O objetivo do aplicativo é a divulgação de eventos entre a comunidade acadêmica.
+Este projeto foi desenvolvido durante a disciplina **Oficina de Integração 2** no curso de Engenharia de Software da **UTFPR - Câmpus Dois Vizinhos**. O objetivo do aplicativo é a divulgação de notícias e eventos entre a comunidade acadêmica.
 
 ## 🚀 Tecnologias Utilizadas
 
