@@ -1,5 +1,3 @@
-// SignupScreen.js
-
 import React, { useState } from "react";
 import { Text, StyleSheet, Alert } from "react-native";
 import { Formik } from "formik";
@@ -32,19 +30,14 @@ export const SignupScreen = ({ navigation }) => {
     }
 
     try {
-      // Cria o usuário
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
-      // Envia link de verificação
       await sendEmailVerification(userCredential.user);
       
-      // Desconecta o usuário
       await signOut(auth);
 
-      // Mostra mensagem de confirmação
       Alert.alert("Registro bem-sucedido!", "Verifique seu e-mail para confirmar a conta.");
       
-      // Redireciona para a tela de login
       navigation.navigate("Login");
       
     } catch (error) {

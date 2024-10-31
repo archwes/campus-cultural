@@ -1,4 +1,3 @@
-// UserProfileScreen.js
 import React, { useState } from "react";
 import { View, Text, TextInput, Alert, TouchableOpacity, StyleSheet } from "react-native";
 import { getAuth, updatePassword, signOut } from "firebase/auth";
@@ -122,7 +121,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 8,
-    backgroundColor: Colors.orange, // Cor laranja para manter consistência com o botão de login
+    backgroundColor: Colors.orange,
     padding: 10,
     borderRadius: 8,
   },

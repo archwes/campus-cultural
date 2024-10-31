@@ -1,5 +1,3 @@
-// LoginScreen.js
-
 import React, { useState } from "react";
 import { Text, StyleSheet, Alert } from "react-native";
 import { Formik } from "formik";
