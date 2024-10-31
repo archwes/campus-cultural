@@ -1,8 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Button } from "react-native";
-import { signOut } from "firebase/auth";
-
-import { auth } from "../config";
+import { View, StyleSheet } from "react-native";
 
 export const HomeScreen = () => {
   return (

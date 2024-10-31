@@ -1,7 +1,9 @@
+// LoginScreen.js
+
 import React, { useState } from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, Alert } from "react-native";
 import { Formik } from "formik";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { StatusBar } from 'expo-status-bar';
 
@@ -15,17 +17,31 @@ export const LoginScreen = ({ navigation }) => {
   const { passwordVisibility, handlePasswordVisibility, rightIcon } =
     useTogglePasswordVisibility();
 
-  const handleLogin = (values) => {
+  const handleLogin = async (values) => {
     const { email, password } = values;
-    signInWithEmailAndPassword(auth, email, password).catch((error) =>
-      setErrorState(error.message)
-    );
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+      if (!userCredential.user.emailVerified) {
+        await signOut(auth);
+        Alert.alert(
+          "E-mail não verificado",
+          "Verifique seu e-mail antes de fazer login."
+        );
+        return;
+      }
+
+      navigation.navigate("Home");
+
+    } catch (error) {
+      setErrorState(error.message);
+    }
   };
+
   return (
     <>
       <View isSafe style={styles.container}>
         <KeyboardAwareScrollView enableOnAndroid={true}>
-          {/* LogoContainer: consist app logo and screen title */}
           <View style={styles.logoContainer}>
             <Logo uri={Images.logo} />
             <Text style={styles.screenTitle}>Bem-vindo novamente!</Text>
@@ -47,7 +63,6 @@ export const LoginScreen = ({ navigation }) => {
               handleBlur,
             }) => (
               <>
-                {/* Input fields */}
                 <TextInput
                   name="email"
                   leftIconName="email"
@@ -63,7 +78,6 @@ export const LoginScreen = ({ navigation }) => {
                   error={touched.email && errors.email ? "E-mail é um campo necessário" : ""}
                   visible={touched.email}
                 />
-
                 <TextInput
                   name="password"
                   leftIconName="key-variant"
@@ -82,18 +96,15 @@ export const LoginScreen = ({ navigation }) => {
                   error={touched.password && errors.password ? "Senha é um campo necessário" : ""}
                   visible={touched.password}
                 />
-                {/* Display Screen Error Messages */}
                 {errorState !== "" ? (
                   <FormErrorMessage error={errorState} visible={true} />
                 ) : null}
-                {/* Login button */}
                 <Button style={styles.button} onPress={handleSubmit}>
                   <Text style={styles.buttonText}>Login</Text>
                 </Button>
               </>
             )}
           </Formik>
-          {/* Button to navigate to SignupScreen to create a new account */}
           <Button
             style={styles.borderlessButtonContainer}
             borderless
@@ -109,15 +120,12 @@ export const LoginScreen = ({ navigation }) => {
         </KeyboardAwareScrollView>
         <StatusBar style="dark" />
       </View>
-
-      {/* App info footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>CampusCultural App</Text>
       </View>
     </>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

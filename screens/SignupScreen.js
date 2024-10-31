@@ -1,7 +1,9 @@
+// SignupScreen.js
+
 import React, { useState } from "react";
 import { Text, StyleSheet, Alert } from "react-native";
 import { Formik } from "formik";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from "firebase/auth";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { View, TextInput, Logo, Button, FormErrorMessage } from "../components";
@@ -24,27 +26,39 @@ export const SignupScreen = ({ navigation }) => {
   const handleSignup = async (values) => {
     const { email, password } = values;
 
-    // Verifica se o email termina com "utfpr.edu.br"
     if (!email.endsWith("utfpr.edu.br")) {
       setErrorState("Por favor, use um e-mail institucional 'utfpr.edu.br'.");
       return;
     }
 
-    // Se o e-mail for válido, prossegue com a criação da conta
-    createUserWithEmailAndPassword(auth, email, password).catch((error) =>
-      setErrorState(error.message)
-    );
+    try {
+      // Cria o usuário
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      
+      // Envia link de verificação
+      await sendEmailVerification(userCredential.user);
+      
+      // Desconecta o usuário
+      await signOut(auth);
+
+      // Mostra mensagem de confirmação
+      Alert.alert("Registro bem-sucedido!", "Verifique seu e-mail para confirmar a conta.");
+      
+      // Redireciona para a tela de login
+      navigation.navigate("Login");
+      
+    } catch (error) {
+      setErrorState(error.message);
+    }
   };
 
   return (
     <View isSafe style={styles.container}>
       <KeyboardAwareScrollView enableOnAndroid={true}>
-        {/* LogoContainer: consist app logo and screen title */}
         <View style={styles.logoContainer}>
           <Logo uri={Images.logo} />
           <Text style={styles.screenTitle}>Crie uma nova conta!</Text>
         </View>
-        {/* Formik Wrapper */}
         <Formik
           initialValues={{
             email: "",
@@ -63,7 +77,6 @@ export const SignupScreen = ({ navigation }) => {
             handleBlur,
           }) => (
             <>
-              {/* Input fields */}
               <TextInput
                 name="email"
                 leftIconName="email"
@@ -115,18 +128,15 @@ export const SignupScreen = ({ navigation }) => {
                 error={errors.confirmPassword}
                 visible={touched.confirmPassword}
               />
-              {/* Display Screen Error Messages */}
               {errorState !== "" ? (
                 <FormErrorMessage error={errorState} visible={true} />
               ) : null}
-              {/* Signup button */}
               <Button style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Registrar-se</Text>
               </Button>
             </>
           )}
         </Formik>
-        {/* Button to navigate to Login screen */}
         <Button
           style={styles.borderlessButtonContainer}
           borderless
@@ -173,3 +183,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
