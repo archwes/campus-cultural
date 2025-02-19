@@ -9,6 +9,7 @@ export const Logo = ({ uri }) => {
 
 const styles = StyleSheet.create({
   image: {
+    marginTop: 75,
     width: 200,
     height: 200
   }
