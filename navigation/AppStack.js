@@ -7,7 +7,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { NotificationsScreen } from "../screens/NotificationsScreen";
 import { CreateEventScreen } from "../screens/CreateEventScreen";
 import { EditEventScreen } from "../screens/EditEventScreen";
-import { AuthenticatedUserContext } from "../providers";
+import { AuthenticatedUserContext, NotificationsContext } from "../providers";
+import { View, Text, StyleSheet } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -39,6 +40,7 @@ const NotificationsStack = () => (
 
 export const AppStack = () => {
   const { user } = useContext(AuthenticatedUserContext);
+  const { notifications } = useContext(NotificationsContext);
 
   return (
     <Tab.Navigator
@@ -63,7 +65,14 @@ export const AppStack = () => {
         component={NotificationsStack}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="notifications" size={size} color={color} />
+            <View>
+              <Ionicons name="notifications" size={size} color={color} />
+              {notifications.length > 0 && (
+                <View style={styles.notificationBadge}>
+                  <Text style={styles.notificationCount}>{notifications.length}</Text>
+                </View>
+              )}
+            </View>
           ),
           headerShown: false,
         }}
@@ -93,3 +102,22 @@ export const AppStack = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  notificationBadge: {
+    position: "absolute",
+    right: -6,
+    top: -3,
+    backgroundColor: "red",
+    borderRadius: 6,
+    width: 12,
+    height: 12,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  notificationCount: {
+    color: "white",
+    fontSize: 10,
+    fontWeight: "bold",
+  },
+});

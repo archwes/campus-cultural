@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, Text, FlatList, StyleSheet, Alert, TouchableOpacity, Image } from "react-native";
 import { collection, query, orderBy, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 import { db, auth } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../config";
+import { NotificationsContext } from "../providers";
 
 export const HomeScreen = () => {
   const [events, setEvents] = useState([]);
   const navigation = useNavigation();
+  const { notificationsEnabled, addNotification } = useContext(NotificationsContext);
 
   useEffect(() => {
     const q = query(collection(db, "events"), orderBy("createdAt", "desc"));
@@ -17,10 +19,15 @@ export const HomeScreen = () => {
         ...doc.data(),
       }));
       setEvents(eventsList);
+
+      if (notificationsEnabled && snapshot.docChanges().some(change => change.type === "added")) {
+        const newEvent = snapshot.docChanges().find(change => change.type === "added").doc.data();
+        addNotification(newEvent);
+      }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [notificationsEnabled]);
 
   const handleDelete = async (id) => {
     try {

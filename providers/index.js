@@ -1,6 +1,15 @@
 import {
   AuthenticatedUserContext,
-  AuthenticatedUserProvider
-} from './AuthenticatedUserProvider';
+  AuthenticatedUserProvider,
+} from "./AuthenticatedUserProvider";
+import {
+  NotificationsContext,
+  NotificationsProvider,
+} from "./NotificationsProvider";
 
-export { AuthenticatedUserContext, AuthenticatedUserProvider };
+export {
+  AuthenticatedUserContext,
+  AuthenticatedUserProvider,
+  NotificationsContext,
+  NotificationsProvider,
+};
