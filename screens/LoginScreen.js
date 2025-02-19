@@ -20,14 +20,16 @@ export const LoginScreen = ({ navigation }) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-      if (!userCredential.user.emailVerified) {
+      /* if (!userCredential.user.emailVerified) {
         await signOut(auth);
         Alert.alert(
           "E-mail não verificado",
           "Verifique seu e-mail antes de fazer login."
         );
         return;
-      }
+      } */
+
+      // Validação de E-mail - DESABILITADO (não é possível verificar e-mails de domínio '@utfpr.edu.br' sem possuir uma conta de fato)
 
       navigation.navigate("Home");
 
