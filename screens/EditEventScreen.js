@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } fro
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Colors } from "../config";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export const EditEventScreen = ({ route, navigation }) => {
   const { event } = route.params;
@@ -31,7 +32,7 @@ export const EditEventScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container} enableOnAndroid={true}>
       <Text style={styles.label}>Título</Text>
       <TextInput
         style={styles.input}
@@ -61,7 +62,7 @@ export const EditEventScreen = ({ route, navigation }) => {
       <TouchableOpacity style={styles.button} onPress={handleUpdateEvent}>
         <Text style={styles.buttonText}>Atualizar Evento</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

@@ -5,6 +5,8 @@ import { db, auth } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../config";
 import { NotificationsContext } from "../providers";
+import MaskedView from '@react-native-masked-view/masked-view';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export const HomeScreen = () => {
   const [events, setEvents] = useState([]);
@@ -42,6 +44,10 @@ export const HomeScreen = () => {
     navigation.navigate("EditEvent", { event });
   };
 
+  const handleEventPress = (event) => {
+    navigation.navigate("EventDetails", { event });
+  };
+
   const formatDateTime = (date) => {
     const formattedDate = date.toDate().toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -63,27 +69,39 @@ export const HomeScreen = () => {
         data={events}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.eventContainer}>
-            <Text style={styles.title}>{item.title}</Text>
-            {item.imageUrl ? (
-              <Image source={{ uri: item.imageUrl }} style={styles.image} />
-            ) : null}
-            <Text style={styles.description}>{item.description}</Text>
-            <Text style={styles.creator}>Criado por: {item.creator}</Text>
-            <Text style={styles.date}>
-              Data: {item.createdAt ? formatDateTime(item.createdAt) : "Data não disponível"}
-            </Text>
-            {auth.currentUser.email === item.creator && (
-              <View style={styles.buttonsContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => handleEdit(item)}>
-                  <Text style={styles.buttonText}>Editar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => handleDelete(item.id)}>
-                  <Text style={styles.buttonText}>Deletar</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
+          <TouchableOpacity onPress={() => handleEventPress(item)}>
+            <View style={styles.eventContainer}>
+              <Text style={styles.title}>{item.title}</Text>
+              {item.imageUrl ? (
+                <Image source={{ uri: item.imageUrl }} style={styles.image} />
+              ) : null}
+              <MaskedView
+                style={{ flex: 1, flexDirection: 'row', height: 140 }}
+                maskElement={
+                  <LinearGradient
+                    colors={['black', 'transparent']}
+                    style={{ flex: 1 }}
+                  />
+                }
+              >
+                <Text style={styles.description} numberOfLines={7}>{item.description}</Text>
+              </MaskedView>
+              <Text style={styles.creator}>Criado por: {item.creator}</Text>
+              <Text style={styles.date}>
+                Data: {item.createdAt ? formatDateTime(item.createdAt) : "Data não disponível"}
+              </Text>
+              {auth.currentUser.email === item.creator && (
+                <View style={styles.buttonsContainer}>
+                  <TouchableOpacity style={styles.button} onPress={() => handleEdit(item)}>
+                    <Text style={styles.buttonText}>Editar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.button} onPress={() => handleDelete(item.id)}>
+                    <Text style={styles.buttonText}>Deletar</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          </TouchableOpacity>
         )}
       />
     </View>

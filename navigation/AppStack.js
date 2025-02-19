@@ -7,6 +7,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { NotificationsScreen } from "../screens/NotificationsScreen";
 import { CreateEventScreen } from "../screens/CreateEventScreen";
 import { EditEventScreen } from "../screens/EditEventScreen";
+import { EventDetailsScreen } from "../screens/EventDetailsScreen";
 import { AuthenticatedUserContext, NotificationsContext } from "../providers";
 import { View, Text, StyleSheet } from "react-native";
 
@@ -17,6 +18,7 @@ const FeedStack = () => (
   <Stack.Navigator>
     <Stack.Screen name="Feed" component={HomeScreen} options={{ headerTitle: "Feed" }} />
     <Stack.Screen name="EditEvent" component={EditEventScreen} options={{ headerTitle: "Editar Evento" }} />
+    <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{ headerTitle: "Detalhes do Evento" }} />
   </Stack.Navigator>
 );
 
