@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from "react-native";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db, auth } from "../config/firebase";
 import { Colors } from "../config";
@@ -7,6 +7,7 @@ import { Colors } from "../config";
 export const CreateEventScreen = ({ navigation }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const handleCreateEvent = async () => {
     if (title === "" || description === "") {
@@ -18,12 +19,14 @@ export const CreateEventScreen = ({ navigation }) => {
       await addDoc(collection(db, "events"), {
         title,
         description,
+        imageUrl,
         creator: auth.currentUser.email,
         createdAt: serverTimestamp(),
       });
       Alert.alert("Sucesso", "Evento criado com sucesso!");
       setTitle("");
       setDescription("");
+      setImageUrl("");
       navigation.navigate("Feed");
     } catch (error) {
       Alert.alert("Erro", error.message);
@@ -39,6 +42,16 @@ export const CreateEventScreen = ({ navigation }) => {
         onChangeText={setTitle}
         placeholder="Título do evento"
       />
+      <Text style={styles.label}>URL da Imagem (opcional)</Text>
+      <TextInput
+        style={styles.input}
+        value={imageUrl}
+        onChangeText={setImageUrl}
+        placeholder="URL da imagem"
+      />
+      {imageUrl ? (
+        <Image source={{ uri: imageUrl }} style={styles.image} />
+      ) : null}
       <Text style={styles.label}>Descrição</Text>
       <TextInput
         style={[styles.input, styles.textArea]}
@@ -73,6 +86,13 @@ const styles = StyleSheet.create({
   },
   textArea: {
     height: 150,
+  },
+  image: {
+    width: "100%",
+    height: 200,
+    marginTop: 8,
+    marginBottom: 16,
+    borderRadius: 20,
   },
   button: {
     width: "100%",

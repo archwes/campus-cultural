@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from "react-native";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Colors } from "../config";
@@ -8,6 +8,7 @@ export const EditEventScreen = ({ route, navigation }) => {
   const { event } = route.params;
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description);
+  const [imageUrl, setImageUrl] = useState(event.imageUrl || "");
 
   const handleUpdateEvent = async () => {
     if (title === "" || description === "") {
@@ -20,6 +21,7 @@ export const EditEventScreen = ({ route, navigation }) => {
       await updateDoc(eventDoc, {
         title,
         description,
+        imageUrl,
       });
       Alert.alert("Sucesso", "Evento atualizado com sucesso!");
       navigation.navigate("Feed");
@@ -37,6 +39,16 @@ export const EditEventScreen = ({ route, navigation }) => {
         onChangeText={setTitle}
         placeholder="Título do evento"
       />
+      <Text style={styles.label}>URL da Imagem (opcional)</Text>
+      <TextInput
+        style={styles.input}
+        value={imageUrl}
+        onChangeText={setImageUrl}
+        placeholder="URL da imagem"
+      />
+      {imageUrl ? (
+        <Image source={{ uri: imageUrl }} style={styles.image} />
+      ) : null}
       <Text style={styles.label}>Descrição</Text>
       <TextInput
         style={[styles.input, styles.textArea]}
@@ -71,6 +83,13 @@ const styles = StyleSheet.create({
   },
   textArea: {
     height: 150,
+  },
+  image: {
+    width: "100%",
+    height: 200,
+    marginTop: 8,
+    marginBottom: 16,
+    borderRadius: 20,
   },
   button: {
     backgroundColor: Colors.orange,

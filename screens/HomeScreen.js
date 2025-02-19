@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, Alert, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, StyleSheet, Alert, TouchableOpacity, Image } from "react-native";
 import { collection, query, orderBy, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 import { db, auth } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
@@ -35,6 +35,21 @@ export const HomeScreen = () => {
     navigation.navigate("EditEvent", { event });
   };
 
+  const formatDateTime = (date) => {
+    const formattedDate = date.toDate().toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    const formattedTime = date.toDate().toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    });
+    return `${formattedDate}, às ${formattedTime}`;
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -43,10 +58,13 @@ export const HomeScreen = () => {
         renderItem={({ item }) => (
           <View style={styles.eventContainer}>
             <Text style={styles.title}>{item.title}</Text>
+            {item.imageUrl ? (
+              <Image source={{ uri: item.imageUrl }} style={styles.image} />
+            ) : null}
             <Text style={styles.description}>{item.description}</Text>
             <Text style={styles.creator}>Criado por: {item.creator}</Text>
             <Text style={styles.date}>
-              Data: {item.createdAt?.toDate().toLocaleString()}
+              Data: {item.createdAt ? formatDateTime(item.createdAt) : "Data não disponível"}
             </Text>
             {auth.currentUser.email === item.creator && (
               <View style={styles.buttonsContainer}>
@@ -106,5 +124,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.white,
     fontWeight: "700",
+  },
+  image: {
+    width: "100%",
+    height: 200,
+    marginTop: 16,
+    marginBottom: 16,
+    borderRadius: 20,
   },
 });
